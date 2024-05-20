@@ -126,23 +126,18 @@ function isElementWithinForgeTool(element) {
 }
 
 function startAutoClick() {
-    autoClickIntervalId = setInterval(() => {
+    const interval = 1000;
+    autoClickInterval = setInterval(() => {
         const mouseEvent = new MouseEvent('click', {
             view: window,
             bubbles: true,
             cancelable: true
         });
         const elem = document.elementFromPoint(lastMousePos.x, lastMousePos.y);
-        if (elem && !isElementWithinForgeTool(elem) && isMouseWithinBrowserWindow()) {
+        if (elem && !elem.classList.contains('forgeTool')) {
             elem.dispatchEvent(mouseEvent);
-            console.log('Auto-clicked at:', { x: lastMousePos.x, y: lastMousePos.y });
         }
-    }, autoClickInterval);
-}
-
-function isMouseWithinBrowserWindow() {
-    return lastMousePos.x >= 0 && lastMousePos.x <= window.innerWidth &&
-           lastMousePos.y >= 0 && lastMousePos.y <= window.innerHeight;
+    }, interval);
 }
 
 function stopAutoClick() {
