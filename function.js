@@ -81,7 +81,7 @@ checkboxIds.forEach(function (id) {
 
 
 let autoClickEnabled = false;
-let autoClickInterval = 1000;
+let autoClickInterval = 1000; // Default interval in milliseconds
 let autoClickIntervalId = null;
 
 document.addEventListener('keydown', (event) => {
@@ -126,18 +126,17 @@ function isElementWithinForgeTool(element) {
 }
 
 function startAutoClick() {
-    const interval = 1000;
-    autoClickInterval = setInterval(() => {
+    autoClickIntervalId = setInterval(() => {
         const mouseEvent = new MouseEvent('click', {
             view: window,
             bubbles: true,
-            cancelable: true
+            cancelable: true,
+            clientX: lastMousePos.x,
+            clientY: lastMousePos.y
         });
-        const elem = document.elementFromPoint(lastMousePos.x, lastMousePos.y);
-        if (elem && !elem.classList.contains('forgeTool')) {
-            elem.dispatchEvent(mouseEvent);
-        }
-    }, interval);
+        document.documentElement.dispatchEvent(mouseEvent);
+        console.log('Auto-clicked at:', { x: lastMousePos.x, y: lastMousePos.y });
+    }, autoClickInterval);
 }
 
 function stopAutoClick() {
